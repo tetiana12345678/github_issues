@@ -23,7 +23,7 @@ defmodule Issues.CLI do
   def process({user, project, count}) do
     Issues.GithubIssues.fetch(user, project)
     |> decode_response
-    |> convert_to_list_of_hashdicts
+    |> convert_to_list_of_maps
     |> sort_into_ascending_order
     |> Enum.take(count)
     |> print_table_for_columns(["number", "created_at", "title"])
@@ -37,9 +37,9 @@ defmodule Issues.CLI do
     System.halt(2)
   end
 
-  def convert_to_list_of_hashdicts(list) do
+  def convert_to_list_of_maps(list) do
     list
-    |> Enum.map(&Enum.into(&1, HashDict.new))
+    |> Enum.map(&Enum.into(&1, Map.new))
   end
 
   def sort_into_ascending_order(list_of_issues) do
